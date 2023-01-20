@@ -32,10 +32,13 @@ def main():
                 if table is not None:
                     table_df = pd.DataFrame(table[1:], columns=table[0])
                     tables_df.append(table_df)
-   
+
             final_df = pd.concat(tables_df)
+            print("[+] Table extracted!")
+
             final_df = final_df.applymap(replace_value)
             final_df.to_csv("output_files/anexo1.csv", index=False)
+            print("[+] CSV created!")
 
         with zipfile.ZipFile('teste_rafael_malcervelli.zip', 'w') as zip_file:
             for root, dirs, files in os.walk("./output_files"):
