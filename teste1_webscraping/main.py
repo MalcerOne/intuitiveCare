@@ -53,7 +53,7 @@ def main():
             
         print("[+] All files downloaded!")
 
-        with zipfile.ZipFile('all_edownloaded_files.zip', 'w') as zip_file:
+        with zipfile.ZipFile('all_downloaded_files.zip', 'w') as zip_file:
             for root, dirs, files in os.walk(pdf_folder):
                 for file in files:
                     zip_file.write(os.path.join(root, file))
