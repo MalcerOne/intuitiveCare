@@ -3,35 +3,36 @@
     <input v-model="searchValue" placeholder="Search Value" />
     <input v-model="searchColumn" placeholder="Search Column" />
     <button @click="submitSearch">Search</button>
-    <table>
-        <thead>
-            <tr>
-                <th v-for="(value, key) in result[0]" :key="key">{{ key }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="row in result" :key="row.Registro_ANS">
-                <td v-for="(value, key) in row" :key="key">{{ value }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div v-for="(row, index) in result">
+      <div v-for="(value, key) in Object.entries(row)" v-bind:key="key">
+        <span v-if="key != 'long_text_key'">{{ key }}: {{ value }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios'
-
 export default {
   data() {
     return {
-      inputValue: '',
+      searchValue: '',
+      searchColumn: '',
+      result: []
     }
   },
   methods: {
-    async submitData() {
-      const response = await axios.post('http://localhost:5000/submit', { data: this.inputValue });
-      if(response.data.response === 'Data received') {
-        console.log(response.data.data);
+    async submitSearch() {
+      const data = {
+        search_value: this.searchValue,
+        search_column: this.searchColumn
+      }
+      try {
+        const res = await axios.post('http://localhost:5000/submit', data)
+        this.result = JSON.parse(res.data)
+      } catch (err) {
+        console.error(err)
       }
     }
   }
